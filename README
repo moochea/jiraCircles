@@ -1,0 +1,163 @@
+Updated 5th March 2015
+
+jiraCircles 
+
+Overview
+===============
+A little python based application that takes Jira stories and represents them graphically in the form of labelled circles. 
+This application facillitates the user in obtaining the story data and easily modifying the layout and attributes of the story representations, before saving the layout and exporting to an image file. 
+The application does not change any attributes of the stories within Jira. Any changes made using this application is solely within the representation and files derived from the application.
+
+
+File Contents
+==========
+MainWindow.py
+OpenGlApplication.py
+stories.py
+config.py
+shapes.py
+jiraCircles.py
+
+
+Application details and System recommendations
+======================================================
+
+The scripts have been written using Python 2.7. 
+The application has only been tested to run  on Ubuntu 14.04 so far.
+
+
+Libraries / modules required: (majority can be installed via apt-get)
+python-qt4      
+python-qt4-gl   
+libqt4-opengl   
+python-opengl   
+python-imaging  - should come default with Ubuntu 14.04
+python-jira - install using pip 
+
+The openGL rendering despite only dealing with 2D components, uses a fair bit of CPU, hence a really slow computer is not recommended (what are the specs?)
+
+
+
+Getting your system ready
+=======================
+Nothing needs to be done, beyond making sure the required libraries and files are present. 
+note: Some libraries are installed iva apt-get, some by pip; information TBD
+
+
+
+Starting the application
+===================
+
+The application can be run from the command line with several options. Please navigate to the folder of the jiraCircles file before attempting the next few actions.
+
+If you are running the application for the first time, start the application by typing "./jiraCircles"
+If you have a json file already previously generated and savedi in the current directory, and you want to automatically load it, type "./jiraCircles --file newfile.json" (if the file is named 'newfile.json')
+
+Type "./jiraCircles --help" for options
+
+
+The Config Window
+====================
+The config file allows the user to select the source from which the stories are loaded, and to save the story configuration to a JSON file.
+
+
+Loading stories
+----------------
+There are 2 sources: file, jira.
+
+After the stories are successfully retrieved and loaded, the Main Window with the graphical display of the stories and the controls to edit the story attributes will appear.
+
+Loading from file
+---------------
+The file MUST be a json file previously generated or saved using this application.
+
+Loading from Jira
+----------------
+To use this, one must have an account on that Jira server, and provide a Jira filter (generated from advanced search in Jira)
+
+
+Saving the file
+----------------
+The file will be saved as a JSON file with entries from the Story class. This file generated can be loaded onto the application later for editting and exporting image files
+
+
+
+The Main Window
+==================
+
+The main window is made up of several componenets:
+* the graphic frame where the stories are represented as circles
+* the control frame where there are buttons and entry fields
+
+Graphic Frame
+---------------
+The graphic space itself has 2 sections; one enclosed by a visible rectangular outline, and the space outside the outline.
+
+After the stories are loaded, they will be represented by circles randomly distributed within the graphic space.
+The story key is permanently displayed and translates with the story circle when it is clicked and dragged within the frame.
+
+When a story is clicked, it gets selected. To indicate the story selection, the story summary appears near the story circle.
+
+
+Control Frame
+-------------
+The controls allow the user to:
+* set the title of stories (a short title that is displayed together with the story key)
+* change the state of the story
+* update the progress of the story
+* add or remove story dependencies
+
+Setting the Title
+--------------------------
+1) If not previously selected, click on the target story in the graphic frame
+2) Click on the story title field in the lower control frame
+3) Type in the new title
+4) Press the "Set as Story Title' button
+
+The story title should appear and be displayed next to the story circle
+
+
+Changing the story State
+---------------------------
+1) If not previously selected, click on the target story in the graphic frame
+2) Access the pull down menu in the bottom middle of the control frame, and select the new state
+
+Changing the story Progress
+-----------------------------
+1) If not previously selected, click on the target story in the graphic frame
+2) Access the spin box in the middle of the control frame and either enter the new progress value in or use the up and down buttons to change the progress
+3) Press the 'Set Progress' button
+
+
+Adding and removing dependencies
+----------------------------------
+To add a dependency link:
+1) If not previously selected, click on the target story in the graphic frame
+2) In the right most list of the control frame, select the target story to set as a dependency and press the 'add' button
+A connector with an arrowhead should appear and link the story with its dependent story
+
+To remove a dependency link:
+1) If not previously selected, click on the target story in the graphic frame (with arrows that point from it to the dependency that we want to remove)
+2) In the left list of the 'depndency links' label,, select the story listed to remove as a dependency and press the 'remove' button
+The connector between the main story and the previously dependent story should disappear.
+
+Exporting to image file
+-----------------------
+The Python Imaging Library supports exporting to imultiple image formats.
+As the pixel data read from the framebuffer is read in the form of RGB Unsigned byte values, and quality wise, bitmaps were tested to have acceptable quality, it is the recommended image output format.
+Simply provide the filename with the bmp extension (e.g. image1.bmp) , and press the 'output to image' button.
+The portion of the graphic frame that gets rendered and exported is the area within the rectangle. Any stories not wihtin the rectangle will NOT get output to the image file.
+
+
+Application Configuration
+=====================
+There are extra configuration values that can be tweaked to affect the representations in the graphic frame
+These values are present in the config.py file, and are read once upon first running the jiraCircles application
+These include:
+* colour shades used in the graphic frame
+* story circle size scaling
+* dependency connector line types - straight, fancy straight, curved
+* font type, size, colour
+
+
+If any of the configuration values are changed, simply close and re-launch the application for the new configuration values to be applied.
